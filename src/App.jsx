@@ -15,9 +15,6 @@ import BookingPage from './pages/BookingPage'
 import BookingsPage from './pages/BookingsPage'
 
 axios.defaults.baseURL = "https://ankit-hotel-backend.vercel.app/";
-
-axios.defaults.withCredentials = true;
-
 function App() {
   const [count, setCount] = useState(0)
 
