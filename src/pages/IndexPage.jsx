@@ -17,7 +17,7 @@ export default function IndexPage() {
             <Link to={'/place/'+place._id} key={place._id}>
                 <div className=" rounded-2xl flex mb-2">
                     {place.photos?.[0] && (
-                            <img className="rounded-2xl object-cover aspect-square" src={'/api/uploads/'+place.photos?.[0]} alt="" />
+                            <img className="rounded-2xl object-cover aspect-square" src={'/uploads/'+place.photos?.[0]} alt="" />
                         )
                     }
                     </div>
