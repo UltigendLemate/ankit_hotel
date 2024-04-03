@@ -14,7 +14,7 @@ import {UserContextProvider} from "./UserContext";
 import BookingPage from './pages/BookingPage'
 import BookingsPage from './pages/BookingsPage'
 
-axios.defaults.baseURL = "http://localhost:3001";
+axios.defaults.baseURL = "https://ankit-hotel-backend.vercel.app/";
 
 axios.defaults.withCredentials = true;
 
