@@ -112,10 +112,10 @@ app.post('/logout', (req,res)=>{
 app.post('/upload-by-link' , async (req,res)=>{
     const {link}= req.body;
     const newName= 'photo' + Date.now() + '.jpg';
-    await imageDownloader.image({
-        url: link,
-        dest: __dirname + '/uploads/' +newName,
-    });
+    // await imageDownloader.image({
+    //     url: link,
+    //     dest: __dirname + '/uploads/' +newName,
+    // });
     res.json(newName);
 })
 
@@ -129,7 +129,7 @@ app.post('/upload',photosMiddleware.array('photos', 100) ,(req,res)=>{
         const ext= parts[parts.length-1];
         const newPath= path  + '.' + ext;
         // const actual= newPath.replace('uploads\\', 'uploads/');
-        fs.renameSync(path, newPath);
+        // fs.renameSync(path, newPath);
         // console.log(path, typeof path);
         // console.log(newPath, typeof newPath);
         const repl= newPath.replace('uploads\\','');
