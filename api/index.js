@@ -3,6 +3,8 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const User = require('./models/user.js');
 const jwt = require('jsonwebtoken');
+const https = require('https');
+const http = require('http');
 const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const imageDownloader = require('image-downloader');
@@ -15,14 +17,14 @@ const app= express();
 
 const bcryptSalt= bcrypt.genSaltSync(10);
 const jwtSecret= 'sldkasdjfasdnkasjdfaskdljsdf';
-
+app.set('port', (process.env.PORT || 3000));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static( __dirname + '/uploads'));
-// app.use(cors({
-//     origin: 'http://localhost:5173',
-//     credentials: true
-// }));
+app.use(cors({
+    origin: "https://ankit-hotel.vercel.app:5173",
+    credentials: true
+}));
 
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
@@ -39,13 +41,13 @@ mongoose.connect(process.env.MONGO_URL);
 console.log("script running");
 
 
-app.get('/test', (req,res) => {
-    // console.log('test ok');
+app.get('/api/test', (req,res) => {
+    console.log('test ok');
     res.json('test ok');
   });
 
 
-app.get('/profile', (req,res)=>{
+app.get('/api/profile', (req,res)=>{
     const {token} = req.cookies;
 
     if(token){
@@ -61,7 +63,7 @@ app.get('/profile', (req,res)=>{
 })
 
 
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
     const {name, email, password} = req.body;
     try{
         const userDoc= await User.create({
@@ -77,7 +79,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
     const {email, password}= req.body;
     const userDoc= await User.findOne({email});
 
@@ -104,12 +106,12 @@ app.post('/login', async (req, res) => {
 });
 
 
-app.post('/logout', (req,res)=>{
+app.post('/api/logout', (req,res)=>{
     res.clearCookie('token','').json(true);
 })
 
 // console.log({__dirname});
-app.post('/upload-by-link' , async (req,res)=>{
+app.post('/api/upload-by-link' , async (req,res)=>{
     const {link}= req.body;
     const newName= 'photo' + Date.now() + '.jpg';
     // await imageDownloader.image({
@@ -141,7 +143,7 @@ app.post('/upload-by-link' , async (req,res)=>{
 //     res.json(uploadedFiles);
 // })
 
-app.post('/places', async (req,res)=>{
+app.post('/api/places', async (req,res)=>{
     const {token} = req.cookies;
     const {
         title,address,addedPhotos,description,price,
@@ -157,7 +159,7 @@ app.post('/places', async (req,res)=>{
         res.json(placeDoc);
     });
 });
-app.get('/user-places', async (req,res)=>{
+app.get('/api/user-places', async (req,res)=>{
     const {token} = req.cookies;
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
@@ -167,13 +169,13 @@ app.get('/user-places', async (req,res)=>{
 });
 
 
-app.get('/places/:id', async (req,res)=>{  
+app.get('/api/places/:id', async (req,res)=>{  
     const {id}= req.params;
     const place= await Place.findById(id);
     res.json(place);
 });
 
-app.put('/places', async (req,res)=>{
+app.put('/api/places', async (req,res)=>{
     const {token} = req.cookies;
     const {
         id,
@@ -195,12 +197,12 @@ app.put('/places', async (req,res)=>{
     });
 });
 
-app.get('/places', async (req,res)=>{
+app.get('/api/places', async (req,res)=>{
     const places= await Place.find();
     res.json(places);
 });
 
-app.post('/bookings',  async (req,res)=>{
+app.post('/api/bookings',  async (req,res)=>{
     const userData= await getUserDataFromReq(req); 
     const {place,checkIn,checkOut,numberOfGuests,name,phone,price}= req.body;
      booking.create({
@@ -216,10 +218,12 @@ app.post('/bookings',  async (req,res)=>{
 
 
 
-app.get('/bookings', async (req,res)=>{
+app.get('/api/bookings', async (req,res)=>{
     const userData= await getUserDataFromReq(req);
     res.json( await booking.find({user:userData.id}).populate('place') );
 });
-app.listen(4000); 
+app.listen(app.get('port'), function() {
+    console.log('Express app vercel-express-react-demo is running on port', app.get('port'));
+  });
 
 module.exports = app;

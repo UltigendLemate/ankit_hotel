@@ -14,8 +14,9 @@ import {UserContextProvider} from "./UserContext";
 import BookingPage from './pages/BookingPage'
 import BookingsPage from './pages/BookingsPage'
 
-// axios.defaults.baseURL = 'http://localhost:4000'
-// axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "https://ankit-hotel.vercel.app:3001";
+
+axios.defaults.withCredentials = true;
 
 function App() {
   const [count, setCount] = useState(0)
