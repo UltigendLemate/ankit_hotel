@@ -11,7 +11,7 @@ export default function RegisterPage(){
         ev.preventDefault();
         
         try{
-            axios.post('/register', {name, email, password});
+            axios.post('/api/register', {name, email, password});
             setRedirect(true);
             alert('User registered successfully');
         } catch(e){

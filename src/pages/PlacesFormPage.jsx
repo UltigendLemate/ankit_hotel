@@ -23,7 +23,7 @@ export default function PlacesFormPage(){
 
     useEffect(()=>{
         if(!id) return;
-        axios.get('/places/'+id).then(({data})=>{
+        axios.get('/api/places/'+id).then(({data})=>{
             setTitle(data.title);
             setAddress(data.address);
             setAddedPhotos(data.photos);
@@ -52,13 +52,13 @@ export default function PlacesFormPage(){
             price,
         };
         if(id){
-            await axios.put('/places', {
+            await axios.put('/api/places', {
                 id, ...newPlace
             });
             setRedirect(true);
         }else{
             //newplace
-            await axios.post('/places', newPlace);
+            await axios.post('/api/places', newPlace);
             setRedirect(true);
         }
     }

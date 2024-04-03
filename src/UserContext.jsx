@@ -10,7 +10,7 @@ export function UserContextProvider({children}){
     useEffect( ()=>{
         // const user = localStorage.getItem('user');
         if(!user){
-            const {data}= axios.get('/profile').then(({data})=>{
+            const {data}= axios.get('/api/profile').then(({data})=>{
                 setUser(data);
                 setReady(true);
             });
